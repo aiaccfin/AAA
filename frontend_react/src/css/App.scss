@@ -1,0 +1,43 @@
+// App.scss
+
+.app-container {
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background: #333;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 10px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+
+        &:hover {
+            background: #444;
+        }
+
+        &.active {
+            font-weight: bold;
+            color: #FFD700;
+        }
+    }
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+    flex-grow: 1;
+}

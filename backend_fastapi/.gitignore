@@ -1,0 +1,6 @@
+.git 
+.env
+.v12
+__pycache__
+tmp
+logs
