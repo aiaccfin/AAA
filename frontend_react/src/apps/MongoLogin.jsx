@@ -4,6 +4,17 @@ import { Link } from 'react-router-dom';
 
 import {MDBContainer,MDBInput,MDBCheckbox,MDBBtn,} from 'mdb-react-ui-kit';
 
+function decodeToken(token) {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+        throw new Error("Invalid token format");
+    }
+    
+    const payload = JSON.parse(atob(parts[1])); // Decode Base64 payload
+    return payload;
+}
+
+
 function LoginMG() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -30,10 +41,16 @@ function LoginMG() {
 
             const data = await response.json();
             localStorage.setItem("token", data.access_token); // Store token
-            await fetchUserInfo();
+            // await fetchUserInfo();
+            const token = localStorage.getItem("token");
+            setUser(data);  // Update React state
+            
+            const decodedData = decodeToken(token);
+            setSuccessMessage(`User Token Info:<br>${JSON.stringify(decodedData, null, 2)}`);
+
         } catch (error) {
             console.error('Error making request:', error);
-            setError('You are not authorized to use the system. Call admin for help.');
+            setError('You not authorized to use the system. Call admin for help.');
             setSuccessMessage(null); // Clear success message
         }
     };
