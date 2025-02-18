@@ -20,5 +20,3 @@ async def create_user(user: UserCreate):
     user_dict = user.model_dump()
     new_user = await users_collection.insert_one(user_dict)
     return {"id": str(new_user.inserted_id), **user_dict}
-
-

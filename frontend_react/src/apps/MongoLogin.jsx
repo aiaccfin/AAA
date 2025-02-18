@@ -4,15 +4,7 @@ import { Link } from 'react-router-dom';
 
 import {MDBContainer,MDBInput,MDBCheckbox,MDBBtn,} from 'mdb-react-ui-kit';
 
-function decodeToken(token) {
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-        throw new Error("Invalid token format");
-    }
-    
-    const payload = JSON.parse(atob(parts[1])); // Decode Base64 payload
-    return payload;
-}
+import { decodeToken } from '../utils/auth';
 
 
 function LoginMG() {

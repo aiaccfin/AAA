@@ -67,3 +67,16 @@ uvicorn==0.32.1
 virtualenv==20.28.0
 watchfiles==1.0.0
 websockets==14.1
+python-jose
+pydantic_settings
+passlib
+psycopg2-binary
+pytesseract
+PyPDF2
+pymongo
+openai
+fitz
+PyMuPDF
+motor
+pdf2image
+pyjwt
