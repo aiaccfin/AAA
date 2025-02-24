@@ -7,7 +7,8 @@
 .sidebar {
     width: 200px;
     height: 100vh;
-    background: #333;
+    background: #F3F4F6;
+    border-right: 1px solid #D1D5DB;
     padding: 20px;
     position: fixed;
     left: 0;
@@ -21,17 +22,18 @@
     .nav-link {
         display: block;
         padding: 10px;
-        color: white;
+        color: #374151;
         text-decoration: none;
         transition: 0.3s;
 
         &:hover {
-            background: #444;
+            background: #E5E7EB;
         }
 
         &.active {
             font-weight: bold;
-            color: #FFD700;
+            color: #2563EB;
+            background: #E0E7FF;
         }
     }
 }
