@@ -9,7 +9,7 @@ class TokenResponse(BaseModel):
     groups: list[str]
 
 class LoginRequest(BaseModel):
-    username: str
+    email: str
     password: str
 
 

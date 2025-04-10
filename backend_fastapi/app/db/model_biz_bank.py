@@ -27,7 +27,6 @@ class Biz_Bank(BizBankBase, table=True):  # Table for database
 class BizBankCreate(BizBankBase):  # Used for request body
     pass
 
-
 class BizBankRead(BizBankBase):  # Used for response models
     pass
 

@@ -8,8 +8,6 @@ class TokenResponse(BaseModel):
     roles: list[str]
     groups: list[str]
 
-
-
 class UserCreate(BaseModel):
     email: EmailStr
     name: str
@@ -18,7 +16,12 @@ class UserCreate(BaseModel):
     groups: List[str] = Field(default=["9999"]) 
     primary_role: Optional[str] = "88"  # Fixed default: "88"
     primary_group: Optional[str] = "9999"  # Fixed default: "9999"
+    email_verified: bool = False
+    is_verified: bool = False
 
+class EmailVerification(BaseModel):
+    email: EmailStr
+    code: str
 
 class User(UserCreate):
     id: str

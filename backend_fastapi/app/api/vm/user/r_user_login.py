@@ -20,15 +20,19 @@ from app.db.x_mg_conn import users_collection
 
 @router.post("/login")
 async def login(request: LoginRequest):
-    print(request.username)
-    user = await users_collection.find_one({"name": request.username})
+    print(request.email)
+    user = await users_collection.find_one({"email": request.email})
     
     if not user or not pwd_context.verify(request.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not user.get("is_verified", False):
+        raise HTTPException(status_code=403, detail="Email not verified")
+
 
     # Create JWT token
     token_data = {
-        "sub": user["name"],
+        "sub": user["email"],
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=ACCESS_TOKEN_EXPIRE_MINUTES),
         "primary_role":  user.get("primary_role", []),
         "primary_group": user.get("primary_group", []),

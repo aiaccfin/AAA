@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = f"xAIBooks API - {os.getenv('ENV', 'development').capitalize()}"
     DESCRIPTION: str = "AAAA - Ai Automatic Accounting API:  production-ready"
     ENV: Literal["development", "staging", "production"] = "development"
-    VERSION: str = "8.8.8.2025.1.20"
+    VERSION: str = "2025.4.10"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     CFG: ClassVar  = dotenv_values(".env")
     API_USERNAME: str = "tEnangIN"

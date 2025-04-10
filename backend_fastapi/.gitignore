@@ -4,3 +4,5 @@
 __pycache__
 tmp
 logs
+credentials.json
+token.json
