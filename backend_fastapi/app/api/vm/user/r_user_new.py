@@ -9,7 +9,7 @@ from app.utils.gmail_api_sender import generate_and_send_verification_code
 router = APIRouter()
 
 
-@router.post("/register", response_model=User)
+@router.post("/register", response_model=User,  status_code=201)
 async def create_user(user: UserCreate):
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     user.password_hash = pwd_context.hash(user.password_hash)

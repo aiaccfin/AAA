@@ -6,7 +6,7 @@ from app.db.x_mg_conn import groups_collection
 
 router = APIRouter()
 
-@router.post("/", response_model=Group)
+@router.post("/", response_model=Group, status_code=201)
 async def create_group(group: GroupCreate):
     group_dict = group.model_dump()
     result = await groups_collection.insert_one(group_dict)  # Use `await`
