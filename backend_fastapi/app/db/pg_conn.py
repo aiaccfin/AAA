@@ -3,8 +3,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from app.config import CFG
-SQLALCHEMY_DATABASE_URL = CFG['PG_ALCHEMY']
+from app.config import settings
+
+
+SQLALCHEMY_DATABASE_URL = settings.CFG['PG_AWS_FASTAPI']
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL) #engine that connects to the database using the provided URL.
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) #session factory that allows us to create new database sessions for each request

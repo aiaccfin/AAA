@@ -1,13 +1,14 @@
 # db_asyncpg.py
 import os, dotenv
-CFG = dotenv.dotenv_values(".env")
+from app.config import settings
+
 
 import asyncpg
 from fastapi import HTTPException
 
 class AsyncDatabase:
     def __init__(self):
-        self.database_url = CFG['PG_AWS_URI']
+        self.database_url = settings.CFG['PG_AWS_FASTAPI']
         
 
     async def connect(self):
