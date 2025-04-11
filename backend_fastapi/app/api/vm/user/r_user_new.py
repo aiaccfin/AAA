@@ -4,7 +4,6 @@ from passlib.context import CryptContext # type: ignore
 
 from app.models.m_user import UserCreate, User, TokenResponse, EmailVerification
 from app.db.x_mg_conn import users_collection, verification_collection
-from app.utils import email_verification_code
 from app.utils.gmail_api_sender import generate_and_send_verification_code
 
 router = APIRouter()
