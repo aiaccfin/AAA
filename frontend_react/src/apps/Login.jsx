@@ -4,8 +4,11 @@ import { Link } from 'react-router-dom';
 
 import {MDBContainer,MDBInput,MDBCheckbox,MDBBtn,} from 'mdb-react-ui-kit';
 
+import { decodeToken } from '../utils/auth';
+
+
 function Login() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null); // State for success message
@@ -16,12 +19,12 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch('https://492ogn6a27.execute-api.us-east-2.amazonaws.com/l1/login', {
+            const response = await fetch('http://localhost:8080/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (!response.ok) {
@@ -29,41 +32,68 @@ function Login() {
             }
 
             const data = await response.json();
+            localStorage.setItem("token", data.access_token); // Store token
+            // await fetchUserInfo();
+            const token = localStorage.getItem("token");
+            setUser(data);  // Update React state
+            
+            const decodedData = decodeToken(token);
+            setSuccessMessage(`User Token Info:<br>${JSON.stringify(decodedData, null, 2)}`);
 
-            if (data.success) {
-                const { firstname, lastname, company, email } = data.user;
-                setUser(data.user);
-                setSuccessMessage(
-                    `Welcome, <strong>${firstname} ${lastname}</strong>! ` +
-                    `You are logged in as: ${username}.<br>` +
-                    `Company: ${company}<br>` +
-                    `Email: ${email}`
-                );
-                setError(null); // Clear any previous errors
-            } else {
-                setError('Invalid login credentials');
-                setSuccessMessage(null); // Clear success message
-            }
         } catch (error) {
             console.error('Error making request:', error);
-            setError('You are not authorized to use the system. Call admin for help.');
+            setError('You not authorized to use the system. Call admin for help.');
             setSuccessMessage(null); // Clear success message
         }
     };
 
+    const fetchUserInfo = async () => {
+        const token = localStorage.getItem("token");
+        console.log('retreive from local:')
+        console.log(token)
+        if (!token) return;
+    
+        try {
+            const response = await fetch("http://localhost:8080/user/me", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            console.log("Response Status:", response.status);
+            const responseData = await response.json();
+            console.log("Response Data:", responseData);
+    
+            if (response.status === 401) {  // ✅ Handle Unauthorized case
+                console.warn("Invalid token, logging out...");
+                localStorage.removeItem("token");
+                return;
+            }
+            
+            if (!response.ok) throw new Error("Failed to fetch user info");
+    
+            setUser(responseData);  // Update React state
+            const userInfoHtml = Object.entries(responseData)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                .join("<br>");
+            setSuccessMessage(`User Info:<br>${userInfoHtml}`);
+
+        } catch (error) {
+            console.error("User info error:", error);
+        }
+    };
+    
     return (
         <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
             <form onSubmit={handleSubmit}>
                 <MDBInput
                     wrapperClass='mb-4'
-                    label='User Name'
+                    label='MG Name'
                     id='form1'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
                 <MDBInput
                     wrapperClass='mb-4'
-                    label='Password'
+                    label='MG Pwd'
                     id='form2'
                     type='password'
                     value={password}

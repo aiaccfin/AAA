@@ -7,8 +7,8 @@ import {MDBContainer,MDBInput,MDBCheckbox,MDBBtn,} from 'mdb-react-ui-kit';
 import { decodeToken } from '../utils/auth';
 
 
-function LoginMG() {
-    const [username, setUsername] = useState('');
+function Login() {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null); // State for success message
@@ -24,7 +24,7 @@ function LoginMG() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (!response.ok) {
@@ -88,8 +88,8 @@ function LoginMG() {
                     wrapperClass='mb-4'
                     label='MG Name'
                     id='form1'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
                 <MDBInput
                     wrapperClass='mb-4'
@@ -124,4 +124,4 @@ function LoginMG() {
     );
 }
 
-export default LoginMG;
+export default Login;
