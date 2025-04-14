@@ -13,3 +13,6 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class LoginVerification(BaseModel):
+    email: EmailStr
+    code: str
