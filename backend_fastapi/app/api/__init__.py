@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from app.api.v1 import r_root, system_setup, biz_setup
-from app.api.v2 import v2Router
-from app.api.vm import vmRouter
+from app.api.v1  import r_root, system_setup, biz_setup
+from app.api.v2  import v2Router
+from app.api.vm  import vmRouter
 from app.api.ocr import ocrRouter
 from app.utils.u_auth_py import authent
 

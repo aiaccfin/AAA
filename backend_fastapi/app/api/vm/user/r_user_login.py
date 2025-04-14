@@ -64,3 +64,6 @@ async def get_user_info(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Token expired")
     except PyJWTError:  # ✅ Correct exception name
         raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    
+    

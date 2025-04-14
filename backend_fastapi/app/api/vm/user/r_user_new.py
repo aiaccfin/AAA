@@ -40,3 +40,15 @@ async def verify_email(data: EmailVerification):
 
     await verification_collection.delete_many({"email": data.email})
     return {"msg": "Email successfully verified"}
+
+
+@router.post("/resend-verification")
+async def resend_verification(data: EmailVerification):  # or use a simple `EmailRequest` model
+    user = await users_collection.find_one({"email": data.email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.get("is_verified"):
+        raise HTTPException(status_code=400, detail="Email already verified")
+
+    await generate_and_send_verification_code(data.email)
+    return {"msg": "Verification code resent"}

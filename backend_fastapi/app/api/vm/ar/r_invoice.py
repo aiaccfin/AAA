@@ -17,7 +17,7 @@ async def import_invoice(invoice: InvoiceModel):
                 
         result = await invoice_collection.insert_one(invoice.dict())
         return {
-            "status": "success",
+            "status":      "success",
             "inserted_id": str(result.inserted_id)
         }
     except Exception as e:
