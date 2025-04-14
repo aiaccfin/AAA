@@ -1,18 +1,28 @@
+from datetime import datetime, date
+
 def verification_template(code: str) -> tuple[str, str]:
     subject = "Verification Code from xAIBooks"
     body = f"Your verification code is: {code}. Please check Spam folder if you don't see it in your inbox."
     return subject, body
 
 def invoice_reminder_template(vendor: str, invoice_number: str, due_date: str, balance_due: float) -> tuple[str, str]:
-    subject = f"Reminder: Invoice #{invoice_number} is Due TODAY!"
-    # body = f"""
-    # This is a friendly reminder from xAIBooks Automatical Accounting. 
+    # subject = f"Reminder: Invoice #{invoice_number} is Due TODAY!"
+    # Convert due_date string to date object
+    try:        
+        due_date_obj = datetime.strptime(due_date.replace('.', ''), "%b%d, %Y").date()
+    except ValueError:
+        # Fallback if due_date is not in the expected format
+        subject = f"Reminder: Invoice #{invoice_number}"
+    else:
+        today = date.today()
+        if due_date_obj == today:
+            subject = f"Reminder: Invoice #{invoice_number} is Due TODAY!"
+        elif due_date_obj < today:
+            days_late = (today - due_date_obj).days
+            subject = f"Reminder: Invoice #{invoice_number} is past due for {days_late} day{'s' if days_late > 1 else ''}!"
+        else:
+            subject = f"Reminder: Invoice #{invoice_number} is due on {due_date}"
     
-    # The Invoice #{invoice_number} is due on {due_date}.
-    # <b>The balance</b> due is ${balance_due:.2f}.
-
-    # Please ensure timely payment to avoid penalty. Thank you!
-    # """
     body = f"""
       <body style="font-family: Arial, sans-serif; color: #333;">
         <p>Dear Valued Customer,</p>

