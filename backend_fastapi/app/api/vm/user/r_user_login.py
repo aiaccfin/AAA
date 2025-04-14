@@ -17,7 +17,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 1))
 
-from app.models.m_login import TokenResponse, LoginRequest
+from app.models.m_login import TokenResponse, LoginRequest, LoginVerification
 from app.db.x_mg_conn import users_collection
 
 @router.post("/login")

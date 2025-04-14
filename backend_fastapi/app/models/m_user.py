@@ -41,3 +41,7 @@ class GroupCreate(BaseModel):
 
 class Group(GroupCreate):
     id: str  # MongoDB _id
+
+class LoginVerification(BaseModel):
+    email: EmailStr
+    code: str
