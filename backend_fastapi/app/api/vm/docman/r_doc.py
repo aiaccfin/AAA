@@ -7,6 +7,10 @@ import os
 router = APIRouter()
 
 BASE_DIR = Path("./tmp")
+DEFAULT_FOLDER = Path("./tmp")
+
+class FolderCreateRequest(BaseModel):
+    folder_name: str
 
 
 @router.get("/listfolder/{folder_name}")
@@ -56,3 +60,24 @@ def list_jack_directory():
         })
 
     return {"items": items}
+
+
+@router.post("/create_folder")
+def create_folder(request: FolderCreateRequest):
+    """
+    Create a new folder in the default directory
+    """
+    try:
+        new_folder_path = os.path.join(DEFAULT_FOLDER, request.folder_name)
+
+        if os.path.exists(new_folder_path):
+            raise HTTPException(status_code=400, detail="Folder already exists")
+
+        os.makedirs(new_folder_path)
+        return {"message": f"Folder '{request.folder_name}' created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Create default folder if it doesn't exist
+os.makedirs(DEFAULT_FOLDER, exist_ok=True)

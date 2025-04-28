@@ -7,7 +7,7 @@ from app.utils.u_auth_py import authent
 
 vmRouter = APIRouter()
 
-# vmRouter.include_router(arRouter)
+vmRouter.include_router(arRouter)
 vmRouter.include_router(docRouter)
 vmRouter.include_router(r_user_login.router, prefix="/user",  tags=["xai_user"], dependencies=[Depends(authent)])
 vmRouter.include_router(r_user_new.router,   prefix="/user",  tags=["xai_user"], dependencies=[Depends(authent)])
