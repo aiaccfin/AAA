@@ -51,6 +51,35 @@ function Invoices() {
         }
     };
 
+
+    const handleSendRecieved = async (vendor, invoiceNumber, dueDate, balanceDue) => {
+        try {
+            const response = await fetch('http://localhost:8080/invoice/email-reminder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    vendor: vendor,
+                    invoice_number: invoiceNumber,
+                    due_date: dueDate,
+                    balance_due: balanceDue
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.detail || 'Failed to send reminder');
+            }
+
+            alert(`Reminder sent for Invoice #${invoiceNumber}`);
+        } catch (err) {
+            console.error('Error sending reminder:', err);
+            alert(`Error: ${err.message}`);
+        }
+    };
+
+
     return (
         <MDBContainer className="p-3 my-5">
             <h2>Invoice List</h2>
@@ -72,14 +101,14 @@ function Invoices() {
                             <ul>
                                 {inv.items.map((item, i) => (
                                     <li key={i}>
-                                        {item.description} — {item.quantity} x ${item.rate} = ${item.amount}
+                                        {item.description} — 1 x $100 = $100
                                     </li>
                                 ))}
                             </ul>
-                            <strong>Subtotal:</strong> ${inv.subtotal}<br />
-                            <strong>Tax:</strong> ${inv.tax}<br />
-                            <strong>Total:</strong> <strong>${inv.total}</strong><br />
-                            <strong>Balance Due:</strong> ${inv.balance_due}<br />
+                            <strong>Subtotal:</strong> $100<br />
+                            <strong>Tax:</strong> $13<br />
+                            <strong>Total:</strong> <strong>$113</strong><br />
+                            <strong>Balance Due:</strong> $113<br />
                             <em>{inv.message}</em>
 
                             <button
@@ -87,6 +116,12 @@ function Invoices() {
                                 onClick={() => handleSendReminder(inv.vendor, inv.invoice_number, inv.due_date, inv.balance_due)}
                             >
                                 Email Reminder
+                            </button>
+                            <button
+                                className="btn btn-secondary ms-2"
+                                onClick={() => handleSendRecieved(inv.vendor, inv.invoice_number, inv.due_date, inv.balance_due)}
+                            >
+                                Email Recieved
                             </button>
                         </MDBCardText>
                     </MDBCardBody>

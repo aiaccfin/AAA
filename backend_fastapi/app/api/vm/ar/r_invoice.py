@@ -47,3 +47,18 @@ def send_invoice_email(data: EmailReminderRequest):
         return {"message": "Reminder email sent"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+
+@router.post("/email-received")
+def send_email_received(data: EmailReminderRequest):
+    try:
+        send_invoice_reminder(
+            vendor=data.vendor,
+            invoice_number=data.invoice_number,
+            due_date=data.due_date,
+            balance_due=data.balance_due,
+        )
+        return {"message": "Thank you email sent"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
