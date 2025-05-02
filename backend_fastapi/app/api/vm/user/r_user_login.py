@@ -25,15 +25,15 @@ async def login(request: LoginRequest):
     print(request.email)
     user = await users_collection.find_one({"email": request.email})
     
-    if not user or not pwd_context.verify(request.password, user["password_hash"]):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    
-    await generate_and_send_verification_code(user["email"])
-    raise HTTPException(
-                status_code=403,
-                detail="Email not verified. A new verification code has been sent to your email."
-            )
+    if not user.get("is_verified", False) and not user.get("email_verified", False):
+        await generate_and_send_verification_code(user["email"])
+        raise HTTPException(
+            status_code=403,
+            detail="Email not verified. A new verification code has been sent to your email."
+        )
 
+        # Email is verified, login is successful
+    return {"message": "Login successful"}
 
 @router.get("/me")
 async def get_user_info(token: str = Depends(oauth2_scheme)):
