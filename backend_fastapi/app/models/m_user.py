@@ -8,6 +8,9 @@ class TokenResponse(BaseModel):
     roles: list[str]
     groups: list[str]
 
+class UserEmail(BaseModel):
+    email: EmailStr
+
 class UserCreate(BaseModel):
     email: EmailStr
     name: str
