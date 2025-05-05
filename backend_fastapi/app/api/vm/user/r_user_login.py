@@ -33,7 +33,18 @@ async def login(request: LoginRequest):
         )
 
         # Email is verified, login is successful
-    return {"message": "Login successful"}
+    # return {"message": "Login successful"}
+    token_data = {
+        "sub": user["email"],
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=ACCESS_TOKEN_EXPIRE_MINUTES),
+        "primary_role":  user.get("primary_role", []),
+        "primary_group": user.get("primary_group", []),
+        "roles": [str(role) for role in user.get("roles", [])],  # Ensure list of strings
+        "groups": [str(group) for group in user.get("groups", [])],
+    }
+    token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+    return {"access_token": token, "token_type": "bearer"}
+
 
 @router.get("/me")
 async def get_user_info(token: str = Depends(oauth2_scheme)):
