@@ -18,7 +18,7 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 CREDENTIALS_FILE = "./credentials.json"
 TOKEN_FILE = "./token.json"
 
-def generate_ascii_verification_code(length=44):
+def generate_ascii_verification_code(length=6):
     chars = string.ascii_letters + string.digits 
     return ''.join(secrets.choice(chars) for _ in range(length))
 

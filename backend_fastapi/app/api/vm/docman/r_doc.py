@@ -13,7 +13,7 @@ class FolderCreateRequest(BaseModel):
     folder_name: str
 
 
-@router.get("/listfolder/{folder_name}")
+@router.get("/listfolder/{folder_name:path}")
 def list_specific_folder(folder_name: str):
     cwd = Path(os.getcwd())
     target_folder = cwd / folder_name
