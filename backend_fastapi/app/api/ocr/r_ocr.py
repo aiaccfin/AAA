@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
-import dotenv
+from fastapi import APIRouter, Depends, File, UploadFile, HTTPException, UploadFile, Form 
+
+import os
+import dotenv, os
 
 from base64 import b64encode
 
@@ -12,6 +14,7 @@ CFG = dotenv.dotenv_values(".env")
 ENDPOINT_URL = CFG['GOOGLE_VISION_ENDPOINT']
 API_KEY = CFG['GOOGLE_CLOUD_API_KEY']
 IMG_LOC = "rawbs_Page_5.jpg"
+UPLOAD_ROOT = "tmp"
 
 @router.post("/")
 async def ocr(oUploadFile: UploadFile = File(...)):
@@ -47,3 +50,24 @@ def google_ocr():
     return ocr_result
 
 
+@router.post("/upload")
+async def upload_file(
+    oUploadFile: UploadFile = File(...),
+    folder_name: str = Form(...)
+):
+    try:
+        # Create folder if it doesn't exist
+        target_folder = os.path.join(UPLOAD_ROOT, folder_name)
+        os.makedirs(target_folder, exist_ok=True)
+
+        file_path = os.path.join(target_folder, oUploadFile.filename)
+
+        # Save the file
+        with open(file_path, "wb") as f:
+            content = await oUploadFile.read()
+            f.write(content)
+
+        return {"message": "File uploaded successfully", "file_path": file_path}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
