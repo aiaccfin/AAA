@@ -21,6 +21,7 @@ system_prompt_client = """
     Return a JSON object with at least the following fields:
     - client_business_name: string
     - client_contact_name: string
+    - client_contact_title: string
     - client_address: string
     - client_email: string
     - client_phone: string
@@ -36,7 +37,7 @@ class ImagePayload(BaseModel):base64_image: str
 
 router = APIRouter()
 
-def b64_2_json(base64_image):
+def b64_2_json_invoice(base64_image):
     response = client.chat.completions.create(
         model=model,
         response_format={ "type": "json_object" },
@@ -73,7 +74,7 @@ def client_b64_2_json(base64_image):
 @router.post("/image_invoice_json")
 async def invoice_image_to_json(payload: ImagePayload):
     try:
-        result_json = b64_2_json(payload.base64_image)
+        result_json = b64_2_json_invoice(payload.base64_image)
         return {"data": result_json}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
