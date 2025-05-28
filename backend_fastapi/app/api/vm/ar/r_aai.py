@@ -9,15 +9,37 @@ model = "gpt-4o"
 system_prompt_invoice = """
     You are an assistant that extracts structured data from invoices provided as images.
     Return a JSON object with at least the following fields:
+    
+    - my_business_name: string
+    - my_business_address: string
+    - my_business_phone: string
+    - my_business_number: string
+
+    - client_business_name: string
+    - client_contact_name: string
+    - client_address: string
+    - client_phone: string
+
     - invoice_number: string
-    - client_name: string
+    - issue_date: string
+    - due_date: string
+    - reference: string
+
+    - item_list: list
+
+    - invoice_subtotal: number
+    - invoice_discount: number
+    - invoice_tax: number
+    - invoice_total: number
+    - invoice_notes: number
+    - invoice_terms_conditions: number
 
     If the value is not found, return it as null.
     Return only valid JSON.
 """
 
 system_prompt_client = """
-    You are an assistant that extracts structured data from Name Card or similar documents provided as images.
+    You are an assistant that extracts structured data from Name Card or similar documents provided as images. 
     Return a JSON object with at least the following fields:
     - client_business_name: string
     - client_contact_name: string
@@ -26,7 +48,7 @@ system_prompt_client = """
     - client_email: string
     - client_phone: string
     - client_website: string    
-    - client_currency: string    
+    - client_currency: string, based on the address to return the possible currency. 
     - client_note: string
 
     If the value is not found, return it as null.
