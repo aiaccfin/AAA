@@ -37,14 +37,14 @@ system_prompt_client = """
 system_prompt_me = """
     You are an assistant that extracts structured data from Name Card or similar documents provided as images.
     Return a JSON object with at least the following fields:
-    - biz_name: string
-    - biz_address: string
-    - biz_email: string
-    - biz_phone: string
-    - biz_biz_number: string
-    - biz_bank_info: string
-    - biz_website: string    
-    - biz_currency: based on the address, pick a  currency from below list: USD, CAD, OTHER
+    - business_name: string
+    - business_address: string
+    - business_email: string
+    - business_phone: string
+    - business_number: string
+    - business_bank_info: string
+    - business_website: string    
+    - business_currency: based on the address, pick a  currency from below list: USD, CAD, OTHER
 
     If the value is not found, return it as null.
     Return only valid JSON.
