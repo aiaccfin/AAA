@@ -21,8 +21,8 @@ system_prompt_invoice = """
     - client_phone: string
 
     - invoice_number: string
-    - issue_date: string
-    - due_date: string
+    - issue_date: ISO 8601 date string (e.g., "2025-05-28T00:00:00.000Z")
+    - due_date: ISO 8601 date string (e.g., "2025-05-28T00:00:00.000Z")
     - reference: string
 
     - item_list: list
