@@ -21,11 +21,11 @@ def get_one(one_id: int, db: Session = Depends(get_session)):
     return c_receipt.get_one(one_id=one_id, db=db)
 
 @router.post("/new")
-def post_new_receipt(receipt: m_receipt.receiptCreate, db: Session = Depends(get_session)):
+def post_new_receipt(receipt: m_receipt.ReceiptCreate, db: Session = Depends(get_session)):
     return c_receipt.create_receipt(receipt=receipt, db=db)
 
 @router.patch("/{one_id}")
-def update_1_receipt(one_id: int, receipt: m_receipt.receiptUpdate, db: Session = Depends(get_session)):
+def update_1_receipt(one_id: int, receipt: m_receipt.ReceiptUpdate, db: Session = Depends(get_session)):
     return c_receipt.update_receipt(one_id=one_id, receipt=receipt, db=db)
 
 
@@ -49,8 +49,8 @@ async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_ses
 
         print("DEBUG inv_json:", inv_json)
         
-        # receipt_data = m_receipt.receiptCreate.model_validate(inv_json["content"])
-        receipt_data = m_receipt.receiptCreate.model_validate(inv_json)
+        # receipt_data = m_receipt.ReceiptCreate.model_validate(inv_json["content"])
+        receipt_data = m_receipt.ReceiptCreate.model_validate(inv_json)
 
         saved_receipt = c_receipt.create_receipt(receipt_data, db)
         
