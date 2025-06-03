@@ -2,7 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from app.config import settings
 
-engine = create_engine(settings.CFG['PG_AWS_FASTAPI'], echo=False)
+engine = create_engine(settings.CFG['PG_AIACC'], echo=False)
 
 
 def create_db_and_tables():

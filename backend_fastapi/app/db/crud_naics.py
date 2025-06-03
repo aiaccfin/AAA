@@ -2,9 +2,8 @@ from fastapi import HTTPException, status
 from sqlmodel import Session, select
 from app.db import conn, model_naics
 
-def get_all(offset1: int = 0, limit1: int = 20, db: Session = None):
-    print(offset1 + limit1)
-    all = db.exec(select(model_naics.Naics_Standard).offset(offset1).limit(limit1)).all()
+def get_all(db: Session = None):
+    all = db.exec(select(model_naics.Naics_Standard)).all()
     return all
 
 def get_one(one_id: int, db: Session = None):

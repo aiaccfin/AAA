@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from .model_coa import User, Role, Permission
+from app.db.model.model_coa import User, Role, Permission
 from .schemas import UserCreate
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
