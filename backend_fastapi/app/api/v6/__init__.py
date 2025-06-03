@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.api.v6.naics import p_naics
 from app.api.v6.invoice import p_invoice
-# from app.api.v6.receipt import p_receipt
+from app.api.v6.receipt import p_receipt
 from app.utils.u_auth_py import authent
 
 v6Router = APIRouter()

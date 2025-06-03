@@ -13,7 +13,7 @@ class ReceiptBase(SQLModel):
     total: Optional[float] = None
     payment: Optional[str] = None
     paymentTerm: Optional[str] = None
-    reference_: Optional[str] = Field(default=None, alias="reference ")
+    reference: Optional[str] = None
     biz_id: Optional[int] = None
     biz_status: Optional[str] = None
     biz_vendor_name: Optional[str] = None
