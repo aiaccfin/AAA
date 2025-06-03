@@ -49,7 +49,9 @@ def is_text_pdf(file: UploadFile) -> bool:
     try:
         pdf_reader = PdfReader(file.file)
         for page in pdf_reader.pages:
+          
             if page.extract_text().strip():  # If any text exists on the page
+                print(1112)
                 return True
         return False
     except Exception as e:
@@ -183,3 +185,32 @@ def pdf_reader(oUploadFile: UploadFile, pdf_name, pdf_folder):
         return None  # Return None if saving fails
 
     return parsed_json
+
+
+# def inv_ai_textpdf(oUploadFile: UploadFile, pdf_name, pdf_folder):
+#     pdf_reader = PdfReader(oUploadFile.file)
+    
+#     text = "\n".join(page.extract_text() for page in pdf_reader.pages)
+#     output_json = text.split("\n")
+    
+#     # output_json = {
+#     #     "details": text.split("\n")  # Splitting by lines for a structured approach
+#     # }
+#     ai_res = ai_inv.inv_txtpdf_2_json(output_json)
+#     parsed_json = json.loads(ai_res)
+
+#     output_filename = pdf_name.replace('.pdf', '_txt.json')
+#     parsed_filename = pdf_name.replace('.pdf', '_txt_parsed.json')
+    
+#     try:
+#         # Save the entire list of processed pages as a JSON file
+#         with open(output_filename, 'w', encoding='utf-8') as f:
+#             json.dump(output_json, f, ensure_ascii=False, indent=4)
+#         with open(parsed_filename, 'w', encoding='utf-8') as f:
+#             json.dump(parsed_json, f, ensure_ascii=False, indent=4)
+#         print(f"JSON file saved successfully to {output_filename}")
+#     except Exception as e:
+#         print(f"Error saving JSON file: {e}")
+#         return None  # Return None if saving fails
+
+#     return parsed_json

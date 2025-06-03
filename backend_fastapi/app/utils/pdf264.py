@@ -34,7 +34,6 @@ def pdf_to_base64_images_fitz(pdf_path):
     return base64_images
 
 
-
 def pdf_to_base64_images(pdf_path, dpi=300):
     # Convert PDF pages to images
     images = convert_from_path(pdf_path, dpi=dpi)
@@ -94,3 +93,19 @@ def pdf_2_images_path_fitz(pdf_path):
 
     return temp_image_paths
 
+
+def pdf_to_one_b64(pdf_path, dpi=300):
+    # Convert only the first page of the PDF to image
+    images = convert_from_path(pdf_path, dpi=dpi, first_page=1, last_page=1)
+    if not images:        return None
+
+    img = images[0]
+    temp_image_path = "temp_page_0.png"
+    img.save(temp_image_path, format="PNG")
+
+    # Convert the image to base64
+    with open(temp_image_path, "rb") as img_file:
+        base64_image = base64.b64encode(img_file.read()).decode("utf-8")
+
+    os.remove(temp_image_path)
+    return base64_image

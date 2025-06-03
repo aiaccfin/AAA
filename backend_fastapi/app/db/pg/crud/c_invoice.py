@@ -15,12 +15,20 @@ def get_one(one_id: int, db: Session = None):
         )
     return one_invoice
 
-def create_invoice(Invoice: m_invoice.InvoiceCreate, db: Session = None):
-    Invoice_to_db = m_invoice.Invoice.model_validate(Invoice)
-    db.add(Invoice_to_db)
+# def create_invoice(Invoice: m_invoice.InvoiceCreate, db: Session = None):
+#     Invoice_to_db = m_invoice.Invoice.model_validate(Invoice)
+#     db.add(Invoice_to_db)
+#     db.commit()
+#     db.refresh(Invoice_to_db)
+#     return Invoice_to_db
+
+def create_invoice(invoice_create: m_invoice.InvoiceCreate, db: Session = None):
+    invoice_to_db = m_invoice.Invoice(**invoice_create.model_dump(exclude={"id"}))
+    db.add(invoice_to_db)
     db.commit()
-    db.refresh(Invoice_to_db)
-    return Invoice_to_db
+    db.refresh(invoice_to_db)
+    return invoice_to_db
+
 
 
 def update_invoice(one_id: int, Invoice: m_invoice.InvoiceUpdate, db: Session = None):

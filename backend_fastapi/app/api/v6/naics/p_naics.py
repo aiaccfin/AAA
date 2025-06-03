@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from app.db  import crud_naics, model_naics
-from app.db.conn import get_session
+from app.db.pg.p_conn import get_session
 
 router = APIRouter()
 

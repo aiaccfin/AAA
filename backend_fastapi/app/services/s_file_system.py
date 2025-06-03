@@ -1,7 +1,7 @@
 import os
 
 async def save_pdf(oUploadFile):
-    pdf_folder = os.path.abspath("./tmp/pdf")
+    pdf_folder = os.path.abspath("./tmp/v6")
     pdf_name = f"{pdf_folder}/{oUploadFile.filename}"
     os.makedirs(pdf_folder, exist_ok=True)
 
