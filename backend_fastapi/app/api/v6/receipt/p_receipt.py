@@ -42,19 +42,19 @@ async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_ses
 
         if u_is_textpdf.is_textpdf(oUploadFile):
             _type = "text-pdf"
-            inv_json = s_inv.inv_textpdf(oUploadFile, pdf_name, pdf_folder)
+            receipt_json = s_inv.receipt_textpdf(oUploadFile, pdf_name, pdf_folder)
         else:
             _type = "img-pdf"
-            inv_json = s_inv.inv_imgpdf(pdf_name, pdf_folder)
+            receipt_json = s_inv.receipt_imgpdf(pdf_name, pdf_folder)
 
-        print("DEBUG inv_json:", inv_json)
+        print("DEBUG receipt_json:", receipt_json)
         
-        # receipt_data = m_receipt.ReceiptCreate.model_validate(inv_json["content"])
-        receipt_data = m_receipt.ReceiptCreate.model_validate(inv_json)
+        # receipt_data = m_receipt.ReceiptCreate.model_validate(receipt_json["content"])
+        receipt_data = m_receipt.ReceiptCreate.model_validate(receipt_json)
 
-        saved_receipt = c_receipt.create_receipt(receipt_data, db)
+        saved_receipt = c_receipt.create_receipt_from_upload(receipt_data, db)
         
-        return {"type": _type , "content": inv_json}
+        return {"type": _type , "content": receipt_json}
     
     
     except Exception as e:

@@ -22,12 +22,12 @@ def create_receipt(receipt: m_receipt.ReceiptCreate, db: Session = None):
     db.refresh(receipt_to_db)
     return receipt_to_db
 
-# def create_receipt(receipt_create: m_receipt.ReceiptCreate, db: Session = None):
-#     receipt_to_db = m_receipt.Receipt(**receipt_create.model_dump(exclude={"id"}))
-#     db.add(receipt_to_db)
-#     db.commit()
-#     db.refresh(receipt_to_db)
-#     return receipt_to_db
+def create_receipt_from_upload(receipt_create: m_receipt.ReceiptCreate, db: Session = None):
+    receipt_to_db = m_receipt.Receipt(**receipt_create.model_dump(exclude={"id"}))
+    db.add(receipt_to_db)
+    db.commit()
+    db.refresh(receipt_to_db)
+    return receipt_to_db
 
 
 

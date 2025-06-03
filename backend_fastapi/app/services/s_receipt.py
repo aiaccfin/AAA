@@ -1,18 +1,16 @@
-import os, json, pytesseract  
-import subprocess, platform
+import os, json
 from fastapi import UploadFile, HTTPException
 from PyPDF2  import PdfReader
-from pymongo import MongoClient
 
 from app.config import settings
 from app.llm   import ai_receipt
 from app.utils import pdf264
 
-def inv_imgpdf(in_file_name: str, out_folder: str):
+def receipt_imgpdf(in_file_name: str, out_folder: str):
     try:
         # Convert PDF to text using your Ghostscript function
         b64_image   = pdf264.pdf_to_one_b64(in_file_name)
-        ai_res = inv_b64_one_2_json(b64_image, in_file_name, out_folder)
+        ai_res = receipt_b64_one_2_json(b64_image, in_file_name, out_folder)
         
         print(f"Parsed ai_res JSON: {ai_res}")
         return ai_res
@@ -20,13 +18,13 @@ def inv_imgpdf(in_file_name: str, out_folder: str):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-def inv_textpdf(oUploadFile: UploadFile, pdf_name, pdf_folder):
+def receipt_textpdf(oUploadFile: UploadFile, pdf_name, pdf_folder):
     pdf_reader = PdfReader(oUploadFile.file)
     
     text = "\n".join(page.extract_text() for page in pdf_reader.pages)
     output_json = text.split("\n")
     
-    ai_res = ai_receipt.inv_ai_txt(output_json)
+    ai_res = ai_receipt.receipt_ai_txt(output_json)
     parsed_json = json.loads(ai_res)
 
     output_filename = pdf_name.replace('.pdf', '_txt.json')
@@ -46,13 +44,13 @@ def inv_textpdf(oUploadFile: UploadFile, pdf_name, pdf_folder):
     return parsed_json
 
 
-def inv_b64_one_2_json(base64_image, original_filename, output_directory):
+def receipt_b64_one_2_json(base64_image, original_filename, output_directory):
     output_directory = os.path.abspath(output_directory)
     os.makedirs(output_directory, exist_ok=True)
 
     try:
         print("Processing image...")
-        one_page_json_string = ai_receipt.inv_ai_b64(base64_image=base64_image)
+        one_page_json_string = ai_receipt.receipt_ai_b64(base64_image=base64_image)
         parsed_json = json.loads(one_page_json_string)
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {e}")
