@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, File, UploadFile, HTTPException, UploadF
 
 from sqlmodel import Session, select
 
-from app.db.pg.crud  import c_invoice
-from app.db.pg.model  import m_invoice
+from app.db.pg.crud  import c_receipt
+from app.db.pg.model  import m_receipt
 from app.db.pg.p_conn import get_session
 from app.services import s_inv, s_file_system
 from app.utils import u_is_textpdf 
@@ -13,28 +13,28 @@ router = APIRouter()
 
 @router.get("/")
 def get_all(db: Session = Depends(get_session),):
-    return c_invoice.get_all( db)
+    return c_receipt.get_all( db)
 
 
 @router.get("/{one_id}")
 def get_one(one_id: int, db: Session = Depends(get_session)):
-    return c_invoice.get_one(one_id=one_id, db=db)
+    return c_receipt.get_one(one_id=one_id, db=db)
 
 @router.post("/new")
-def post_new_invoice(Invoice: m_invoice.InvoiceCreate, db: Session = Depends(get_session)):
-    return c_invoice.create_invoice(Invoice=Invoice, db=db)
+def post_new_receipt(receipt: m_receipt.receiptCreate, db: Session = Depends(get_session)):
+    return c_receipt.create_receipt(receipt=receipt, db=db)
 
 @router.patch("/{one_id}")
-def update_1_invoice(one_id: int, Invoice: m_invoice.InvoiceUpdate, db: Session = Depends(get_session)):
-    return c_invoice.update_invoice(one_id=one_id, Invoice=Invoice, db=db)
+def update_1_receipt(one_id: int, receipt: m_receipt.receiptUpdate, db: Session = Depends(get_session)):
+    return c_receipt.update_receipt(one_id=one_id, receipt=receipt, db=db)
 
 
 @router.delete("/{one_id}")
-def delete_1_invoice(one_id: int, db: Session = Depends(get_session)):
-    return c_invoice.delete_invoice(one_id=one_id, db=db)
+def delete_1_receipt(one_id: int, db: Session = Depends(get_session)):
+    return c_receipt.delete_receipt(one_id=one_id, db=db)
 
 
-@router.post("/upload",)
+@router.post("/upload", tags=["receipt"], summary="Upload receipt PDF")
 async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_session)):
     print(f"Received file: {oUploadFile.filename}")
     try:
@@ -49,10 +49,10 @@ async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_ses
 
         print("DEBUG inv_json:", inv_json)
         
-        # invoice_data = m_invoice.InvoiceCreate.model_validate(inv_json["content"])
-        invoice_data = m_invoice.InvoiceCreate.model_validate(inv_json)
+        # receipt_data = m_receipt.receiptCreate.model_validate(inv_json["content"])
+        receipt_data = m_receipt.receiptCreate.model_validate(inv_json)
 
-        saved_invoice = c_invoice.create_invoice(invoice_data, db)
+        saved_receipt = c_receipt.create_receipt(receipt_data, db)
         
         return {"type": _type , "content": inv_json}
     
