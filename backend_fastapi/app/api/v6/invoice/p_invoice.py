@@ -38,7 +38,7 @@ def delete_1_invoice(one_id: int, db: Session = Depends(get_session)):
 async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_session)):
     print(f"Received file: {oUploadFile.filename}")
     try:
-        pdf_name, pdf_folder = await s_file_system.save_pdf(oUploadFile)
+        pdf_name, pdf_folder = await s_file_system.save_upload_file(oUploadFile)
 
         if u_is_textpdf.is_textpdf(oUploadFile):
             _type = "text-pdf"

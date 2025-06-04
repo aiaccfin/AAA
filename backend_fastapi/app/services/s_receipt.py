@@ -71,3 +71,25 @@ def receipt_b64_one_2_json(base64_image, original_filename, output_directory):
         return None
 
     return parsed_json
+
+def receipt_image(in_file_name: str, out_folder: str):
+    try:
+        # Convert PDF to text using your Ghostscript function
+        b64_image   = pdf264.pdf_to_one_b64(in_file_name)
+        ai_res = receipt_b64_one_2_json(b64_image, in_file_name, out_folder)
+        
+        print(f"Parsed ai_res JSON: {ai_res}")
+        return ai_res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+def receipt_text(in_file_name: str, out_folder: str):
+    try:
+        # Convert PDF to text using your Ghostscript function
+        b64_image   = pdf264.pdf_to_one_b64(in_file_name)
+        ai_res = receipt_b64_one_2_json(b64_image, in_file_name, out_folder)
+        
+        print(f"Parsed ai_res JSON: {ai_res}")
+        return ai_res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

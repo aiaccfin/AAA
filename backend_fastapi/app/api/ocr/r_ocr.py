@@ -19,7 +19,7 @@ UPLOAD_ROOT = "tmp"
 @router.post("/")
 async def ocr(oUploadFile: UploadFile = File(...)):
     try:
-        pdf_name, pdf_folder = await s_file_system.save_pdf(oUploadFile)
+        pdf_name, pdf_folder = await s_file_system.save_upload_file(oUploadFile)
 
         if s_ocr.is_text_pdf(oUploadFile):
             _type = "text-pdf"
