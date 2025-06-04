@@ -36,33 +36,6 @@ def delete_1_receipt(one_id: int, db: Session = Depends(get_session)):
     return c_receipt.delete_receipt(one_id=one_id, db=db)
 
 
-# @router.post("/upload", tags=["receipt"], summary="Upload receipt PDF")
-# async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_session)):
-#     print(f"Received file: {oUploadFile.filename}")
-#     try:
-#         pdf_name, pdf_folder = await s_file_system.save_pdf(oUploadFile)
-
-#         if u_is_textpdf.is_textpdf(oUploadFile):
-#             _type = "text-pdf"
-#             receipt_json = s_receipt.receipt_textpdf(oUploadFile, pdf_name, pdf_folder)
-#         else:
-#             _type = "img-pdf"
-#             receipt_json = s_receipt.receipt_imgpdf(pdf_name, pdf_folder)
-
-#         print("DEBUG receipt_json:", receipt_json)
-        
-#         # receipt_data = m_receipt.ReceiptCreate.model_validate(receipt_json["content"])
-#         receipt_data = m_receipt.ReceiptCreate.model_validate(receipt_json)
-
-#         saved_receipt = c_receipt.create_receipt_from_upload(receipt_data, db)
-        
-#         return {"type": _type , "content": receipt_json}
-    
-    
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
-
-
 @router.post("/upload",)
 async def ocr(oUploadFile: UploadFile = File(...), db: Session = Depends(get_session)):
     print(f"Received file: {oUploadFile.filename}")
