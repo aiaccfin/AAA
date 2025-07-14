@@ -25,6 +25,13 @@ async def login(request: LoginRequest):
     print(request.email)
     user = await users_collection.find_one({"email": request.email})
     
+    # Check if user exists
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    if not pwd_context.verify(request.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+        
     if not user.get("is_verified", False) and not user.get("email_verified", False):
         await generate_and_send_verification_code(user["email"])
         raise HTTPException(
