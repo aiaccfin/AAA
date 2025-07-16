@@ -29,9 +29,6 @@ async def login(request: LoginRequest):
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
-    if not pwd_context.verify(request.password, user["password_hash"]):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-        
     if not user.get("is_verified", False) and not user.get("email_verified", False):
         await generate_and_send_verification_code(user["email"])
         raise HTTPException(
@@ -40,6 +37,11 @@ async def login(request: LoginRequest):
         )
 
         # Email is verified, login is successful
+    if not pwd_context.verify(request.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+        
+
+
     # return {"message": "Login successful"}
     token_data = {
         "sub": user["email"],
