@@ -48,3 +48,8 @@ class Group(GroupCreate):
 class LoginVerification(BaseModel):
     email: EmailStr
     code: str
+
+class ResetPasswordConfirm(BaseModel):
+    email: EmailStr
+    code: str
+    new_password: str

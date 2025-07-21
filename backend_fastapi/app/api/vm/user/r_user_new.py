@@ -2,9 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from passlib.context import CryptContext # type: ignore
 
-from app.models.m_user import UserCreate, User, TokenResponse, EmailVerification
+from app.models.m_user import UserCreate, User, TokenResponse, ResetPasswordConfirm, EmailVerification, UserEmail
 from app.db.x_mg_conn import users_collection, verification_collection
 from app.utils.gmail_api_sender import generate_and_send_verification_code
+
+from passlib.context import CryptContext # type: ignore
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter()
 
@@ -52,3 +55,26 @@ async def resend_verification(data: EmailVerification):  # or use a simple `Emai
 
     await generate_and_send_verification_code(data.email)
     return {"msg": "Verification code resent"}
+
+
+@router.post("/reset-password/request")
+async def request_password_reset(data: UserEmail):
+    user = await users_collection.find_one({"email": data.email})
+    # Always return success, do not reveal if user exists
+    if user:
+        await generate_and_send_verification_code(data.email)
+    return {"msg": "If the email exists, a verification code has been sent."}
+
+@router.post("/reset-password/confirm")
+async def confirm_password_reset(data: ResetPasswordConfirm):
+    code_doc = await verification_collection.find_one({"email": data.email, "code": data.code})
+    if not code_doc:
+        raise HTTPException(status_code=400, detail="Invalid or expired verification code")
+    # Hash new password and update
+    new_hash = pwd_context.hash(data.new_password)
+    result = await users_collection.update_one(
+        {"email": data.email},
+        {"$set": {"password_hash": new_hash, "is_verified": True}},
+    )
+    await verification_collection.delete_many({"email": data.email})
+    return {"msg": "Password reset successful"}
