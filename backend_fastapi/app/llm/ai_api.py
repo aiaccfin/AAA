@@ -140,3 +140,21 @@ def save2db_response(details):
     )
     return response.choices[0].message.content
 
+
+def classify_b64_file(base64_file):
+    prompt = (
+        "Classify the following document as one of: bank statement, invoice, receipt, or other. "
+        "Return only the category name."
+    )
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": [
+                {"type": "text", "text": "Here is the document to classify."},
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_file}", "detail": "high"}}
+            ]}
+        ],
+        temperature=0.0,
+    )
+    return response.choices[0].message.content
