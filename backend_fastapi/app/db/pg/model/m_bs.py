@@ -90,3 +90,7 @@ class BSDetailRead(BSDetailBase):
 
 # Include details in the summary read model after BSDetailRead is defined
 BSSummaryRead.update_forward_refs()
+
+
+class BSAllSummary(BSSummaryBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)

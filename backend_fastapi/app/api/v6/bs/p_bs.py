@@ -17,6 +17,10 @@ router = APIRouter()
 def get_all(db: Session = Depends(get_session),):
     return c_bs.get_all( db)
 
+@router.get("/summary")
+def get_all_summary(db: Session = Depends(get_session),):
+    return c_bs.get_all_summary(db)
+
 
 @router.get("/{one_id}")
 def get_one(one_id: int, db: Session = Depends(get_session)):

@@ -8,6 +8,11 @@ def get_all(db: Session = None):
     all = db.exec(select(m_bs.BSDetail)).all()
     return all
 
+def get_all_summary(db: Session = None):
+    all = db.exec(select(m_bs.BSSummary)).all()
+    return all
+
+
 def get_one(one_id: int, db: Session = None):
     one_bs_detail = db.get(m_bs.BSDetail, one_id)
     if not one_bs_detail:
@@ -16,6 +21,17 @@ def get_one(one_id: int, db: Session = None):
             detail=f"bs_detail not found with id: {one_id}",
         )
     return one_bs_detail
+
+
+def get_one_summary(one_id: int, db: Session = None):
+    one_bs_sum = db.get(m_bs.BSSummary, one_id)
+    if not one_bs_sum:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"bs_summary not found with id: {one_id}",
+        )
+    return one_bs_sum
+
 
 def create_bs_detail(bs_detail: m_bs.BSDetailCreate, db: Session = None):
     bs_detail_to_db = m_bs.BSDetail.model_validate(bs_detail)
