@@ -21,6 +21,7 @@ class BSSummaryBase(SQLModel):
     
     is_locked: Optional[int] = Field(default=0)
     is_deleted: Optional[int] = Field(default=0)
+    status: Optional[str] = Field(default="NEW", description="Status New?")
     
     created_at: Optional[str] = Field(default_factory=lambda: datetime.utcnow().isoformat())
     updated_at: Optional[str] = Field(default_factory=lambda: datetime.utcnow().isoformat())
@@ -62,6 +63,7 @@ class BSDetailBase(SQLModel):
     
     is_reconciled: Optional[int] = Field(default=0)
     is_deleted: Optional[int] = Field(default=0)
+    status: Optional[str] = Field(default="NEW", description="new?")
     
     created_at: Optional[str] = Field(default_factory=lambda: datetime.utcnow().isoformat())
     updated_at: Optional[str] = Field(default_factory=lambda: datetime.utcnow().isoformat())
