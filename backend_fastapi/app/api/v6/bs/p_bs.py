@@ -26,6 +26,12 @@ def get_all_summary(db: Session = Depends(get_session),):
 def get_one(one_id: int, db: Session = Depends(get_session)):
     return c_bs.get_one(one_id=one_id, db=db)
 
+
+@router.get("/summary/{one_id}")
+def get_one(one_id: int, db: Session = Depends(get_session)):
+    return c_bs.get_one_summary(one_id=one_id, db=db)
+
+
 @router.post("/new")
 def post_new_bs_detail(bs_detail: m_bs.BSDetailCreate, db: Session = Depends(get_session)):
     return c_bs.create_bs_detail(bs_detail=bs_detail, db=db)
