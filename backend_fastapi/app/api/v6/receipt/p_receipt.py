@@ -10,13 +10,11 @@ from app.db.pg.p_conn import get_session
 from app.services import s_receipt, s_file_system
 from app.utils import u_is_textpdf 
 
-
 router = APIRouter()
 
 @router.get("/")
 def get_all(db: Session = Depends(get_session),):
-    return c_receipt.get_all( db)
-
+    return c_receipt.get_all(db)
 
 @router.get("/{one_id}")
 def get_one(one_id: int, db: Session = Depends(get_session)):
