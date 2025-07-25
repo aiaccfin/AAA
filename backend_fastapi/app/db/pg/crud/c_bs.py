@@ -22,6 +22,16 @@ def get_one(one_id: int, db: Session = None):
         )
     return one_bs_detail
 
+def get_one_detail_based_on_summary(one_id: int, db: Session = None):
+    statement = select(m_bs.BSDetail).where(m_bs.BSDetail.summary_id == one_id)
+    results = db.exec(statement).all()
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"bs_detail not found with id: {one_id}",
+        )
+    return results
+
 
 def get_one_summary(one_id: int, db: Session = None):
     one_bs_sum = db.get(m_bs.BSSummary, one_id)
@@ -181,3 +191,10 @@ def save_parsed_bs(parsed_json: dict, db: Session) -> m_bs.BSSummary:
     db.commit()
 
     return summary
+
+
+def get_details_by_summary_id(summary_id: int, db: Session = None):
+    """Get all BSDetail records with the given summary_id."""
+    statement = select(m_bs.BSDetail).where(m_bs.BSDetail.summary_id == summary_id)
+    results = db.exec(statement).all()
+    return results
