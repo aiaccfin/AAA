@@ -24,20 +24,48 @@ def generate_ascii_verification_code(length=6):
 
 
 
+# def get_gmail_service():
+#     creds = None
+#     if os.path.exists(TOKEN_FILE):
+#         creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+#     if not creds or not creds.valid:
+#         if creds and creds.expired and creds.refresh_token:
+#             creds.refresh(Request())
+#         else:
+#             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
+#             creds = flow.run_local_server(port=0, open_browser=False)
+#         with open(TOKEN_FILE, "w") as token:
+#             token.write(creds.to_json())
+
+#     return build("gmail", "v1", credentials=creds)
+
+
 def get_gmail_service():
     creds = None
+
     if os.path.exists(TOKEN_FILE):
         creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-            creds = flow.run_local_server(port=0, open_browser=False)
+
+    # 🔁 Check and refresh token explicitly if expired
+    if creds:
+        if creds.expired and creds.refresh_token:
+            print("[INFO] Access token expired. Refreshing...")
+            try:
+                creds.refresh(Request())
+                with open(TOKEN_FILE, "w") as token:
+                    token.write(creds.to_json())
+            except Exception as e:
+                print(f"[ERROR] Token refresh failed: {e}")
+                raise
+    else:
+        print("[INFO] No valid credentials found. Starting OAuth flow.")
+        flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
+        creds = flow.run_local_server(port=0, open_browser=False)
         with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
 
     return build("gmail", "v1", credentials=creds)
+
 
 
 async def generate_and_send_verification_code(email: str):
